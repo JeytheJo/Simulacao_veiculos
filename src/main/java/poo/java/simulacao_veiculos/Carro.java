@@ -1,37 +1,56 @@
-package poo.java.simulacao_veiculos;
+package simulador;
 
 public class Carro extends Veiculo {
+    private int numeroDePorras;
+
+    // Sobrecarga de construtores
     public Carro(String marca, String modelo) {
         super(marca, modelo);
+        this.numeroDePorras = 4;
     }
-    
-    public Carro(String marca, String modelo, int velocidadeInicial) {
-        super(marca, modelo);
-        setVelocidade(velocidadeInicial);
-        
+
+    public Carro(String marca, String modelo, double velocidadeInicial) {
+        super(marca, modelo, velocidadeInicial);
+        this.numeroDePorras = 4;
     }
-    
+
+    public Carro(String marca, String modelo, double velocidadeInicial, int numeroDePortas) {
+        super(marca, modelo, velocidadeInicial);
+        this.numeroDePorras = numeroDePortas;
+    }
+
+    public int getNumeroDePortas() { return numeroDePorras; }
+    public void setNumeroDePortas(int numeroDePortas) { this.numeroDePorras = numeroDePortas; }
+
+    // Sobrescrita acelerar - Carro acelera 10km/h por padrão (já herdado, mas explícito)
+    @Override
     public void acelerar() {
+        if (getCombustivel() <= 0) {
+            System.out.println("[ERRO] " + getMarca() + " " + getModelo() + " sem combustivel!");
+            return;
+        }
         setVelocidade(getVelocidade() + 10);
+        setCombustivel(getCombustivel() - 1);
     }
-    
-    public void acelerar(int incremento) {
-        setVelocidade(getVelocidade() + incremento);
+
+    // Sobrescrita exibirStatus
+    @Override
+    public void exibirStatus() {
+        System.out.println("Carro: " + getMarca() + " " + getModelo()
+                + " | Velocidade: " + getVelocidade() + " km/h"
+                + " | Portas: " + numeroDePorras
+                + " | Combustivel: " + getCombustivel() + "L");
     }
-    
-    public void frear() {
-        int nova = getVelocidade() - 10;
-        setVelocidade(nova < 0 ? 0 : nova);
+
+    // Sobrescrita calcularConsumo
+    @Override
+    public double calcularConsumo() {
+        return 12.0; // 12 km/L
     }
-    
-    public void frear(int decremento) {
-        int nova = getVelocidade() - decremento;
-        setVelocidade(nova < 0 ? 0 : nova);
-        
-    }
+
+    // Sobrescrita toString
     @Override
     public String toString() {
         return "Carro: " + getMarca() + " " + getModelo() + " - Velocidade: " + getVelocidade() + " km/h";
     }
-    
 }
